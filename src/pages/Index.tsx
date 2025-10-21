@@ -22,12 +22,12 @@ interface CartItem extends Pizza {
 }
 
 const pizzas: Pizza[] = [
-  { id: 1, name: 'Маргарита', description: 'Моцарелла, томатный соус, базилик', price: 450, image: '🍕', category: 'Классические' },
-  { id: 2, name: 'Пепперони', description: 'Пепперони, моцарелла, томатный соус', price: 550, image: '🍕', category: 'Мясные' },
-  { id: 3, name: 'Четыре сыра', description: 'Моцарелла, пармезан, горгонзола, дор блю', price: 600, image: '🍕', category: 'Классические' },
-  { id: 4, name: 'Мясная', description: 'Говядина, курица, бекон, моцарелла', price: 650, image: '🍕', category: 'Мясные' },
-  { id: 5, name: 'Вегетарианская', description: 'Шампиньоны, перец, помидоры, оливки', price: 500, image: '🍕', category: 'Вегетарианские' },
-  { id: 6, name: 'Гавайская', description: 'Курица, ананасы, моцарелла', price: 580, image: '🍕', category: 'Специальные' },
+  { id: 1, name: 'Маргарита', description: 'Моцарелла, томатный соус, базилик', price: 450, image: 'https://cdn.poehali.dev/projects/37bd550a-c89d-4300-bba8-c63b6b5e04b3/files/9a25869d-22d4-4a30-b6ef-16f2d4fb5b04.jpg', category: 'Классические' },
+  { id: 2, name: 'Пепперони', description: 'Пепперони, моцарелла, томатный соус', price: 550, image: 'https://cdn.poehali.dev/projects/37bd550a-c89d-4300-bba8-c63b6b5e04b3/files/21062f15-d6c0-46cf-9380-31a4e6656a16.jpg', category: 'Мясные' },
+  { id: 3, name: 'Четыре сыра', description: 'Моцарелла, пармезан, горгонзола, дор блю', price: 600, image: 'https://cdn.poehali.dev/projects/37bd550a-c89d-4300-bba8-c63b6b5e04b3/files/1e0cfe5c-4fb6-453a-bbda-938308895771.jpg', category: 'Классические' },
+  { id: 4, name: 'Мясная', description: 'Говядина, курица, бекон, моцарелла', price: 650, image: 'https://cdn.poehali.dev/projects/37bd550a-c89d-4300-bba8-c63b6b5e04b3/files/9d4967f0-7760-4dfb-9b06-c139599fc2ad.jpg', category: 'Мясные' },
+  { id: 5, name: 'Вегетарианская', description: 'Шампиньоны, перец, помидоры, оливки', price: 500, image: 'https://cdn.poehali.dev/projects/37bd550a-c89d-4300-bba8-c63b6b5e04b3/files/b0e32e81-2618-4462-a0fc-88f76c792a7a.jpg', category: 'Вегетарианские' },
+  { id: 6, name: 'Гавайская', description: 'Курица, ананасы, моцарелла', price: 580, image: 'https://cdn.poehali.dev/projects/37bd550a-c89d-4300-bba8-c63b6b5e04b3/files/d71fd913-d306-4912-b10a-d52f5686612e.jpg', category: 'Специальные' },
 ];
 
 const promos = [
@@ -111,7 +111,7 @@ export default function Index() {
                       <>
                         {cart.map(item => (
                           <div key={item.id} className="flex items-center gap-4 p-4 border rounded-lg">
-                            <span className="text-4xl">{item.image}</span>
+                            <img src={item.image} alt={item.name} className="w-16 h-16 object-cover rounded" />
                             <div className="flex-1">
                               <h4 className="font-semibold">{item.name}</h4>
                               <p className="text-sm text-muted-foreground">{item.price}₽</p>
@@ -214,14 +214,14 @@ export default function Index() {
             <h2 className="text-4xl font-bold text-center mb-12">Меню</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {pizzas.map((pizza, index) => (
-                <Card key={pizza.id} className="hover:shadow-lg transition-shadow animate-scale-in" style={{ animationDelay: `${index * 0.1}s` }}>
+                <Card key={pizza.id} className="hover:shadow-lg transition-shadow animate-scale-in overflow-hidden" style={{ animationDelay: `${index * 0.1}s` }}>
+                  <div className="aspect-square w-full overflow-hidden">
+                    <img src={pizza.image} alt={pizza.name} className="w-full h-full object-cover hover:scale-105 transition-transform duration-300" />
+                  </div>
                   <CardHeader>
                     <div className="flex items-start justify-between">
-                      <div>
-                        <CardTitle>{pizza.name}</CardTitle>
-                        <Badge variant="secondary" className="mt-2">{pizza.category}</Badge>
-                      </div>
-                      <span className="text-5xl">{pizza.image}</span>
+                      <CardTitle>{pizza.name}</CardTitle>
+                      <Badge variant="secondary">{pizza.category}</Badge>
                     </div>
                     <CardDescription className="mt-2">{pizza.description}</CardDescription>
                   </CardHeader>

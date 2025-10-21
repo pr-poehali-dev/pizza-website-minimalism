@@ -3,9 +3,11 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
+import { useToast } from '@/hooks/use-toast';
 import Icon from '@/components/ui/icon';
 
 type PizzaSize = 300 | 500 | 700;
@@ -58,6 +60,16 @@ const promos = [
 export default function Index() {
   const [cart, setCart] = useState<CartItem[]>([]);
   const [selectedSizes, setSelectedSizes] = useState<Record<number, PizzaSize>>({});
+  const { toast } = useToast();
+  const phoneNumber = '+79998887766';
+
+  const copyPhoneNumber = () => {
+    navigator.clipboard.writeText(phoneNumber);
+    toast({
+      title: 'Скопировано!',
+      description: 'Номер телефона скопирован в буфер обмена',
+    });
+  };
 
   const addToCart = (pizza: Pizza, size: PizzaSize) => {
     setCart(prev => {
@@ -221,10 +233,46 @@ export default function Index() {
                 <Button size="lg" className="text-lg px-8" onClick={() => document.getElementById('menu')?.scrollIntoView({ behavior: 'smooth' })}>
                   Смотреть меню
                 </Button>
-                <Button size="lg" variant="outline" className="text-lg px-8">
-                  <Icon name="Phone" size={20} className="mr-2" />
-                  Позвонить
-                </Button>
+                <Dialog>
+                  <DialogTrigger asChild>
+                    <Button size="lg" variant="outline" className="text-lg px-8">
+                      <Icon name="Phone" size={20} className="mr-2" />
+                      Позвонить
+                    </Button>
+                  </DialogTrigger>
+                  <DialogContent className="sm:max-w-md">
+                    <DialogHeader>
+                      <DialogTitle>Позвонить нам</DialogTitle>
+                      <DialogDescription>
+                        Мы работаем ежедневно с 10:00 до 23:00
+                      </DialogDescription>
+                    </DialogHeader>
+                    <div className="flex items-center space-x-2">
+                      <div className="grid flex-1 gap-2">
+                        <Label htmlFor="phone" className="sr-only">
+                          Телефон
+                        </Label>
+                        <Input
+                          id="phone"
+                          value={phoneNumber}
+                          readOnly
+                          className="text-lg font-semibold text-center"
+                        />
+                      </div>
+                      <Button type="button" size="icon" onClick={copyPhoneNumber}>
+                        <Icon name="Copy" size={16} />
+                      </Button>
+                    </div>
+                    <div className="flex gap-2">
+                      <Button asChild className="flex-1">
+                        <a href={`tel:${phoneNumber}`}>
+                          <Icon name="Phone" size={16} className="mr-2" />
+                          Позвонить
+                        </a>
+                      </Button>
+                    </div>
+                  </DialogContent>
+                </Dialog>
               </div>
             </div>
           </div>

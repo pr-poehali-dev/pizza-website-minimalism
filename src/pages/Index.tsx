@@ -112,7 +112,7 @@ export default function Index() {
                   <Icon name="Plus" size={20} className="text-muted-foreground group-hover:text-primary" />
                 </button>
               )}
-              <h1 className="text-2xl font-bold text-secondary">PIZZERIA</h1>
+              <h1 className="text-2xl text-secondary font-bold">Francesco</h1>
             </div>
             
             <div className="hidden md:flex items-center gap-6">

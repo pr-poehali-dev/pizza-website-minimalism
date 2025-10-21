@@ -226,9 +226,7 @@ export default function Index() {
               <h2 className="text-5xl md:text-6xl font-bold mb-6">
                 Настоящая итальянская пицца
               </h2>
-              <p className="text-xl text-muted-foreground mb-8">
-                Приготовлена с любовью из свежих ингредиентов. Доставка за 30 минут или бесплатно!
-              </p>
+              <p className="text-xl text-muted-foreground mb-8">*Какойто текст*</p>
               <div className="flex flex-wrap gap-4 justify-center">
                 <Button size="lg" className="text-lg px-8" onClick={() => document.getElementById('menu')?.scrollIntoView({ behavior: 'smooth' })}>
                   Смотреть меню

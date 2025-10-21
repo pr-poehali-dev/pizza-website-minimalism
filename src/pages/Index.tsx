@@ -278,7 +278,14 @@ export default function Index() {
 
         <section id="menu" className="py-16">
           <div className="container mx-auto px-4">
-            <h2 className="text-4xl font-bold text-center mb-12">Меню</h2>
+            <div className="max-w-3xl mx-auto text-center mb-16">
+              <h2 className="text-4xl font-bold mb-6">Меню</h2>
+              <p className="text-lg text-muted-foreground leading-relaxed">
+                Каждая наша пицца готовится вручную из свежих ингредиентов. Мы используем только натуральное тесто на закваске, 
+                моцареллу премиум-класса и томатный соус по традиционному итальянскому рецепту. Выпекаем в дровяной печи при температуре 400°C 
+                для идеальной хрустящей корочки. Доставляем горячими в течение 30-40 минут по всему городу.
+              </p>
+            </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {pizzas.map((pizza, index) => {
                 const selectedSize = selectedSizes[pizza.id] || 500;

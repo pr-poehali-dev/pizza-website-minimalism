@@ -8,27 +8,46 @@ import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
 import Icon from '@/components/ui/icon';
 
+type PizzaSize = 300 | 500 | 700;
+
 interface Pizza {
   id: number;
   name: string;
   description: string;
-  price: number;
+  basePrice: number;
   image: string;
   category: string;
 }
 
-interface CartItem extends Pizza {
+interface CartItem {
+  id: number;
+  name: string;
+  description: string;
+  basePrice: number;
+  image: string;
+  category: string;
+  size: PizzaSize;
   quantity: number;
 }
 
 const pizzas: Pizza[] = [
-  { id: 1, name: 'Маргарита', description: 'Моцарелла, томатный соус, базилик', price: 450, image: 'https://cdn.poehali.dev/projects/37bd550a-c89d-4300-bba8-c63b6b5e04b3/files/9a25869d-22d4-4a30-b6ef-16f2d4fb5b04.jpg', category: 'Классические' },
-  { id: 2, name: 'Пепперони', description: 'Пепперони, моцарелла, томатный соус', price: 550, image: 'https://cdn.poehali.dev/projects/37bd550a-c89d-4300-bba8-c63b6b5e04b3/files/21062f15-d6c0-46cf-9380-31a4e6656a16.jpg', category: 'Мясные' },
-  { id: 3, name: 'Четыре сыра', description: 'Моцарелла, пармезан, горгонзола, дор блю', price: 600, image: 'https://cdn.poehali.dev/projects/37bd550a-c89d-4300-bba8-c63b6b5e04b3/files/1e0cfe5c-4fb6-453a-bbda-938308895771.jpg', category: 'Классические' },
-  { id: 4, name: 'Мясная', description: 'Говядина, курица, бекон, моцарелла', price: 650, image: 'https://cdn.poehali.dev/projects/37bd550a-c89d-4300-bba8-c63b6b5e04b3/files/9d4967f0-7760-4dfb-9b06-c139599fc2ad.jpg', category: 'Мясные' },
-  { id: 5, name: 'Вегетарианская', description: 'Шампиньоны, перец, помидоры, оливки', price: 500, image: 'https://cdn.poehali.dev/projects/37bd550a-c89d-4300-bba8-c63b6b5e04b3/files/b0e32e81-2618-4462-a0fc-88f76c792a7a.jpg', category: 'Вегетарианские' },
-  { id: 6, name: 'Гавайская', description: 'Курица, ананасы, моцарелла', price: 580, image: 'https://cdn.poehali.dev/projects/37bd550a-c89d-4300-bba8-c63b6b5e04b3/files/d71fd913-d306-4912-b10a-d52f5686612e.jpg', category: 'Специальные' },
+  { id: 1, name: 'Маргарита', description: 'Моцарелла, томатный соус, базилик', basePrice: 450, image: 'https://cdn.poehali.dev/projects/37bd550a-c89d-4300-bba8-c63b6b5e04b3/files/9a25869d-22d4-4a30-b6ef-16f2d4fb5b04.jpg', category: 'Классические' },
+  { id: 2, name: 'Пепперони', description: 'Пепперони, моцарелла, томатный соус', basePrice: 550, image: 'https://cdn.poehali.dev/projects/37bd550a-c89d-4300-bba8-c63b6b5e04b3/files/21062f15-d6c0-46cf-9380-31a4e6656a16.jpg', category: 'Мясные' },
+  { id: 3, name: 'Четыре сыра', description: 'Моцарелла, пармезан, горгонзола, дор блю', basePrice: 600, image: 'https://cdn.poehali.dev/projects/37bd550a-c89d-4300-bba8-c63b6b5e04b3/files/1e0cfe5c-4fb6-453a-bbda-938308895771.jpg', category: 'Классические' },
+  { id: 4, name: 'Мясная', description: 'Говядина, курица, бекон, моцарелла', basePrice: 650, image: 'https://cdn.poehali.dev/projects/37bd550a-c89d-4300-bba8-c63b6b5e04b3/files/9d4967f0-7760-4dfb-9b06-c139599fc2ad.jpg', category: 'Мясные' },
+  { id: 5, name: 'Вегетарианская', description: 'Шампиньоны, перец, помидоры, оливки', basePrice: 500, image: 'https://cdn.poehali.dev/projects/37bd550a-c89d-4300-bba8-c63b6b5e04b3/files/b0e32e81-2618-4462-a0fc-88f76c792a7a.jpg', category: 'Вегетарианские' },
+  { id: 6, name: 'Гавайская', description: 'Курица, ананасы, моцарелла', basePrice: 580, image: 'https://cdn.poehali.dev/projects/37bd550a-c89d-4300-bba8-c63b6b5e04b3/files/d71fd913-d306-4912-b10a-d52f5686612e.jpg', category: 'Специальные' },
 ];
+
+const sizeMultipliers: Record<PizzaSize, number> = {
+  300: 0.7,
+  500: 1.0,
+  700: 1.4,
+};
+
+const calculatePrice = (basePrice: number, size: PizzaSize): number => {
+  return Math.round(basePrice * sizeMultipliers[size]);
+};
 
 const promos = [
   { id: 1, title: 'Две пиццы по цене одной', description: 'Каждый понедельник', discount: '50%' },
@@ -38,34 +57,35 @@ const promos = [
 
 export default function Index() {
   const [cart, setCart] = useState<CartItem[]>([]);
+  const [selectedSizes, setSelectedSizes] = useState<Record<number, PizzaSize>>({});
 
-  const addToCart = (pizza: Pizza) => {
+  const addToCart = (pizza: Pizza, size: PizzaSize) => {
     setCart(prev => {
-      const existing = prev.find(item => item.id === pizza.id);
+      const existing = prev.find(item => item.id === pizza.id && item.size === size);
       if (existing) {
         return prev.map(item =>
-          item.id === pizza.id ? { ...item, quantity: item.quantity + 1 } : item
+          item.id === pizza.id && item.size === size ? { ...item, quantity: item.quantity + 1 } : item
         );
       }
-      return [...prev, { ...pizza, quantity: 1 }];
+      return [...prev, { ...pizza, size, quantity: 1 }];
     });
   };
 
-  const removeFromCart = (id: number) => {
-    setCart(prev => prev.filter(item => item.id !== id));
+  const removeFromCart = (id: number, size: PizzaSize) => {
+    setCart(prev => prev.filter(item => !(item.id === id && item.size === size)));
   };
 
-  const updateQuantity = (id: number, quantity: number) => {
+  const updateQuantity = (id: number, size: PizzaSize, quantity: number) => {
     if (quantity <= 0) {
-      removeFromCart(id);
+      removeFromCart(id, size);
       return;
     }
     setCart(prev =>
-      prev.map(item => (item.id === id ? { ...item, quantity } : item))
+      prev.map(item => (item.id === id && item.size === size ? { ...item, quantity } : item))
     );
   };
 
-  const totalPrice = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+  const totalPrice = cart.reduce((sum, item) => sum + calculatePrice(item.basePrice, item.size) * item.quantity, 0);
   const cartCount = cart.reduce((sum, item) => sum + item.quantity, 0);
 
   return (
@@ -109,19 +129,20 @@ export default function Index() {
                       <p className="text-center text-muted-foreground py-8">Корзина пуста</p>
                     ) : (
                       <>
-                        {cart.map(item => (
-                          <div key={item.id} className="flex items-center gap-4 p-4 border rounded-lg">
+                        {cart.map((item, index) => (
+                          <div key={`${item.id}-${item.size}-${index}`} className="flex items-center gap-4 p-4 border rounded-lg">
                             <img src={item.image} alt={item.name} className="w-16 h-16 object-cover rounded" />
                             <div className="flex-1">
                               <h4 className="font-semibold">{item.name}</h4>
-                              <p className="text-sm text-muted-foreground">{item.price}₽</p>
+                              <p className="text-xs text-muted-foreground">{item.size}г</p>
+                              <p className="text-sm font-semibold text-primary">{calculatePrice(item.basePrice, item.size)}₽</p>
                             </div>
                             <div className="flex items-center gap-2">
                               <Button
                                 size="icon"
                                 variant="outline"
                                 className="h-8 w-8"
-                                onClick={() => updateQuantity(item.id, item.quantity - 1)}
+                                onClick={() => updateQuantity(item.id, item.size, item.quantity - 1)}
                               >
                                 <Icon name="Minus" size={14} />
                               </Button>
@@ -130,7 +151,7 @@ export default function Index() {
                                 size="icon"
                                 variant="outline"
                                 className="h-8 w-8"
-                                onClick={() => updateQuantity(item.id, item.quantity + 1)}
+                                onClick={() => updateQuantity(item.id, item.size, item.quantity + 1)}
                               >
                                 <Icon name="Plus" size={14} />
                               </Button>
@@ -138,7 +159,7 @@ export default function Index() {
                             <Button
                               size="icon"
                               variant="ghost"
-                              onClick={() => removeFromCart(item.id)}
+                              onClick={() => removeFromCart(item.id, item.size)}
                             >
                               <Icon name="Trash2" size={16} />
                             </Button>
@@ -213,27 +234,50 @@ export default function Index() {
           <div className="container mx-auto px-4">
             <h2 className="text-4xl font-bold text-center mb-12">Меню</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {pizzas.map((pizza, index) => (
-                <Card key={pizza.id} className="hover:shadow-lg transition-shadow animate-scale-in overflow-hidden" style={{ animationDelay: `${index * 0.1}s` }}>
-                  <div className="aspect-square w-full overflow-hidden">
-                    <img src={pizza.image} alt={pizza.name} className="w-full h-full object-cover hover:scale-105 transition-transform duration-300" />
-                  </div>
-                  <CardHeader>
-                    <div className="flex items-start justify-between">
-                      <CardTitle>{pizza.name}</CardTitle>
-                      <Badge variant="secondary">{pizza.category}</Badge>
+              {pizzas.map((pizza, index) => {
+                const selectedSize = selectedSizes[pizza.id] || 500;
+                
+                return (
+                  <Card key={pizza.id} className="hover:shadow-lg transition-shadow animate-scale-in overflow-hidden" style={{ animationDelay: `${index * 0.1}s` }}>
+                    <div className="aspect-square w-full overflow-hidden">
+                      <img src={pizza.image} alt={pizza.name} className="w-full h-full object-cover hover:scale-105 transition-transform duration-300" />
                     </div>
-                    <CardDescription className="mt-2">{pizza.description}</CardDescription>
-                  </CardHeader>
-                  <CardFooter className="flex justify-between items-center">
-                    <span className="text-2xl font-bold">{pizza.price}₽</span>
-                    <Button onClick={() => addToCart(pizza)}>
-                      <Icon name="Plus" size={16} className="mr-2" />
-                      В корзину
-                    </Button>
-                  </CardFooter>
-                </Card>
-              ))}
+                    <CardHeader>
+                      <div className="flex items-start justify-between">
+                        <CardTitle>{pizza.name}</CardTitle>
+                        <Badge variant="secondary">{pizza.category}</Badge>
+                      </div>
+                      <CardDescription className="mt-2">{pizza.description}</CardDescription>
+                      
+                      <div className="mt-4 space-y-2">
+                        <Label className="text-xs font-semibold">Размер:</Label>
+                        <div className="flex gap-2">
+                          {([300, 500, 700] as PizzaSize[]).map(size => (
+                            <button
+                              key={size}
+                              onClick={() => setSelectedSizes(prev => ({ ...prev, [pizza.id]: size }))}
+                              className={`flex-1 px-3 py-2 text-sm rounded-md border-2 transition-colors ${
+                                selectedSize === size
+                                  ? 'border-primary bg-primary text-primary-foreground'
+                                  : 'border-muted hover:border-primary/50'
+                              }`}
+                            >
+                              {size}г
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                    </CardHeader>
+                    <CardFooter className="flex justify-between items-center">
+                      <span className="text-2xl font-bold">{calculatePrice(pizza.basePrice, selectedSize)}₽</span>
+                      <Button onClick={() => addToCart(pizza, selectedSize)}>
+                        <Icon name="Plus" size={16} className="mr-2" />
+                        В корзину
+                      </Button>
+                    </CardFooter>
+                  </Card>
+                );
+              })}
             </div>
           </div>
         </section>

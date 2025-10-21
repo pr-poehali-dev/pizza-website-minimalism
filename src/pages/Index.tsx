@@ -383,10 +383,6 @@ export default function Index() {
                 </li>
                 <li className="flex items-start gap-3">
                   <Icon name="Check" size={20} className="text-primary mt-1" />
-                  <span></span>
-                </li>
-                <li className="flex items-start gap-3">
-                  <Icon name="Check" size={20} className="text-primary mt-1" />
                   <span>Работаем с *время* без выходных</span>
                 </li>
                 <li className="flex items-start gap-3">

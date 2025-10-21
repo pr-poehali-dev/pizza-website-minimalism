@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -38,19 +38,6 @@ const promos = [
 
 export default function Index() {
   const [cart, setCart] = useState<CartItem[]>([]);
-  const [logoImage, setLogoImage] = useState<string | null>(null);
-  const fileInputRef = useRef<HTMLInputElement>(null);
-
-  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setLogoImage(reader.result as string);
-      };
-      reader.readAsDataURL(file);
-    }
-  };
 
   const addToCart = (pizza: Pizza) => {
     setCart(prev => {
@@ -86,33 +73,9 @@ export default function Index() {
       <header className="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b">
         <nav className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <input
-                ref={fileInputRef}
-                type="file"
-                accept="image/*"
-                className="hidden"
-                onChange={handleImageUpload}
-              />
-              {logoImage ? (
-                <button
-                  onClick={() => fileInputRef.current?.click()}
-                  className="relative group cursor-pointer"
-                >
-                  <img src={logoImage} alt="Logo" className="h-10 w-10 object-cover rounded" />
-                  <div className="absolute inset-0 bg-black/50 rounded opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                    <Icon name="Upload" size={16} className="text-white" />
-                  </div>
-                </button>
-              ) : (
-                <button
-                  onClick={() => fileInputRef.current?.click()}
-                  className="h-10 w-10 border-2 border-dashed border-muted-foreground/30 rounded flex items-center justify-center hover:border-primary transition-colors group"
-                >
-                  <Icon name="Plus" size={20} className="text-muted-foreground group-hover:text-primary" />
-                </button>
-              )}
-              <h1 className="text-2xl text-secondary font-bold">Francesco</h1>
+            <div className="flex items-center gap-3">
+              <img src="https://cdn.poehali.dev/files/426146f0-6897-481f-946d-fd60b1c5301d.jpg" alt="Francesco Logo" className="h-12 w-12 object-contain" />
+              <h1 className="text-2xl font-bold text-secondary">Francesco</h1>
             </div>
             
             <div className="hidden md:flex items-center gap-6">

@@ -330,7 +330,8 @@ export default function Index() {
 
         <section id="promos" className="py-16 bg-muted/30">
           <div className="container mx-auto px-4">
-            <h2 className="text-4xl font-bold text-center mb-12">Акции</h2>
+            <h2 className="text-4xl font-bold text-center mb-12">Акции
+*Примеры акций если они будут*</h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {promos.map(promo => (
                 <Card key={promo.id} className="border-2 border-primary/20 hover:border-primary transition-colors">

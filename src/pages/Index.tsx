@@ -364,7 +364,7 @@ export default function Index() {
                   <Icon name="Truck" size={32} className="text-primary" />
                 </div>
                 <h3 className="text-xl font-semibold">Доставляем</h3>
-                <p className="text-muted-foreground">Доставка до 30 минут по всему городу</p>
+                <p className="text-muted-foreground">Есть доставка это круто</p>
               </div>
               <div className="space-y-4">
                 <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto">
